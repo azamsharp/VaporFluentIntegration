@@ -2,13 +2,12 @@ import Fluent
 import Vapor
 
 func routes(_ app: Application) throws {
-    app.get { req in
-        return "It works!"
+   
+    // localhost:8080/planets POST 
+    app.post("planets") { req -> EventLoopFuture<Planet> in
+        
+        let planet = try req.content.decode(Planet.self)
+        return planet.create(on: req.db).map { planet }
     }
-
-    app.get("hello") { req -> String in
-        return "Hello, world!"
-    }
-
-    try app.register(collection: TodoController())
+    
 }
